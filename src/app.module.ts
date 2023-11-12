@@ -9,6 +9,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ScheduleModule } from '@nestjs/schedule';
 import { GoldenAppleParserService } from './golden-apple-parser/golden-apple-parser.service';
 import { GoldenAppleParserModule } from './golden-apple-parser/golden-apple-parser.module';
+import { TasksModule } from './tasks/tasks.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { GoldenAppleParserModule } from './golden-apple-parser/golden-apple-pars
     TelegramBotModule,
     GoldenAppleModule,
     GoldenAppleParserModule,
+    TasksModule,
   ],
   controllers: [],
   providers: [GoldenAppleParserService],

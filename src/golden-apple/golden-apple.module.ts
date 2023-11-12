@@ -5,6 +5,7 @@ import {
   GoldenAppleProduct,
   GoldenAppleProductSchema,
 } from '@src/schemas/golden-apple.schema';
+import { GoldenAppleParserModule } from '@src/golden-apple-parser/golden-apple-parser.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import {
         schema: GoldenAppleProductSchema,
       },
     ]),
+    GoldenAppleParserModule,
   ],
   providers: [GoldenAppleService],
   exports: [GoldenAppleService],

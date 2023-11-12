@@ -4,9 +4,19 @@ import { HydratedDocument, Types } from 'mongoose';
 @Schema({ _id: false })
 class Price {
   @Prop()
-  regular: string;
+  regular: number;
   @Prop()
-  actual: string;
+  actual: number;
+}
+
+@Schema({ _id: false })
+class PriceHistory {
+  @Prop()
+  price: number;
+  @Prop({
+    default: Date.now,
+  })
+  d: Date;
 }
 
 export type GoldenAppleProductDocument = HydratedDocument<GoldenAppleProduct>;
@@ -23,7 +33,13 @@ export class GoldenAppleProduct {
   })
   price: Price;
 
-  @Prop({ required: true })
+  @Prop({
+    type: [PriceHistory],
+    required: true,
+  })
+  priceHistory: PriceHistory[];
+
+  @Prop({ required: true, unique: true })
   itemId: string;
 
   @Prop({ required: true })
@@ -42,6 +58,9 @@ export class GoldenAppleProduct {
 
   @Prop({ required: true })
   url: string;
+
+  @Prop()
+  description?: string;
 }
 
 export const GoldenAppleProductSchema =

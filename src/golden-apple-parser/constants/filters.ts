@@ -1,6 +1,6 @@
-const cityId = '0c5b2444-70a0-4932-980c-b4dc0d3f02b5';
+export const cityId = '0c5b2444-70a0-4932-980c-b4dc0d3f02b5';
 const cityDistrict = 'Северное Бутово';
-const customerGroupId = '7';
+export const customerGroupId = '7';
 
 const baseFilters = {
   StoreStocks: {

@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
-import { GoldenAppleModule } from '@src/golden-apple/golden-apple.module';
+
+import { GoldenAppleParserService } from './golden-apple-parser.service';
 
 @Module({
-  imports: [GoldenAppleModule],
+  exports: [GoldenAppleParserService],
+  providers: [GoldenAppleParserService],
 })
 export class GoldenAppleParserModule {}

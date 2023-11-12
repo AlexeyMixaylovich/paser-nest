@@ -1,28 +1,16 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Cron } from '@nestjs/schedule';
 import { sleep } from '@src/helpers/sleep';
 import axios from 'axios';
-import { productsUrl } from './constants/url';
-import { TFilters, dataForRequestFlacon } from './constants/filters';
+import { productUrl, productsUrl } from './constants/url';
+import { TFilters, cityId, customerGroupId } from './constants/filters';
 import { FetchProduct } from './types';
 import { getFetchProduct } from './helpers/mappers';
-import { GoldenAppleService } from '@src/golden-apple/golden-apple.service';
 
 @Injectable()
 export class GoldenAppleParserService {
   private readonly logger = new Logger(GoldenAppleParserService.name);
 
-  constructor(protected readonly goldenAppleService: GoldenAppleService) {}
-
-  @Cron('*/10 * * * * *')
-  async handleCron() {
-    this.logger.debug('Called when the current second is 10');
-    const products = await this.getProductsByFilters(dataForRequestFlacon);
-    await this.goldenAppleService.saveFetchProducts(products);
-  }
-  protected async getProductsByFilters(
-    filters: TFilters,
-  ): Promise<FetchProduct[]> {
+  async getProductsByFilters(filters: TFilters): Promise<FetchProduct[]> {
     const products: FetchProduct[] = [];
     for (const body of filters) {
       const data = await this.fetchData(body);
@@ -32,9 +20,6 @@ export class GoldenAppleParserService {
         );
       }
     }
-
-    this.logger.debug('getProductsByFilters.length ' + products.length);
-    this.logger.debug(products);
 
     return products;
   }
@@ -60,5 +45,15 @@ export class GoldenAppleParserService {
     }
 
     return products;
+  }
+  async fetchDescriptionByItemId(itemId: string): Promise<string> {
+    const { data } = await axios.get(productUrl, {
+      params: { itemId, cityId, customerGroupId },
+    });
+
+    const description = (data.data?.productDescription || []).find(
+      (d: any) => d?.type === 'Description',
+    );
+    return (description?.content || '').replaceAll('<br>', '');
   }
 }
